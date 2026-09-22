@@ -1,0 +1,44 @@
+{
+  "step": 3,
+  "url": "https://vb-bank-demo.vercel.app/admin/users",
+  "error": {
+    "result": {
+      "ok": false,
+      "error": "locate_failed",
+      "detail": "no candidate locator resolved: [{'kind': 'dom_selector', 'value': '#this-control-no-longer-exists'}]"
+    },
+    "reason": "no declared pattern matched"
+  },
+  "trace_so_far": [
+    {
+      "step": 1,
+      "action": "click",
+      "result": {
+        "ok": true,
+        "matched_kind": "dom_selector"
+      }
+    },
+    {
+      "step": 2,
+      "action": "click",
+      "result": {
+        "ok": true,
+        "matched_kind": "dom_selector"
+      }
+    },
+    {
+      "step": 3,
+      "action": "type",
+      "result": {
+        "ok": false,
+        "error": "locate_failed",
+        "detail": "no candidate locator resolved: [{'kind': 'dom_selector', 'value': '#this-control-no-longer-exists'}]"
+      }
+    }
+  ],
+  "screenshot": "failure/screenshot.png",
+  "screenshot_withheld": null,
+  "dom_snapshot": "failure/dom_snapshot.html",
+  "screenshot_redacted": true,
+  "pii_redacted_count": 21
+}

@@ -1,0 +1,19 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+.env
+
+# Run output: scripts write timestamped run dirs here. The curated,
+# committed evidence lives in evidence/ instead.
+runs/
+
+# Tool caches / editor state
+.pytest_cache/
+.claude/

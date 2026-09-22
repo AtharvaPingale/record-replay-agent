@@ -1,0 +1,87 @@
+{
+  "artifact_id": "vb-bank-admin-balance",
+  "version": 1,
+  "target": {
+    "surface": "web",
+    "base_url_pattern": "https://vb-bank-demo.vercel.app/*",
+    "entry_url": "https://vb-bank-demo.vercel.app/login"
+  },
+  "input_schema": {
+    "account_number": "string"
+  },
+  "output_schema": {
+    "account_balance": "string"
+  },
+  "checkpoint": {
+    "type": "selector_visible",
+    "value": ".users-card :text(\"{{account_number}}\")",
+    "only_when_url_contains": null
+  },
+  "business_outcomes": [],
+  "recoverable_patterns": [],
+  "output_extractors": [
+    {
+      "name": "account_balance",
+      "target": {
+        "kind": "dom_selector",
+        "value": ".users-card :text-matches(\"^[$][0-9,]+([.][0-9]{2})?$\")"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "target": {
+        "primary": {
+          "kind": "dom_selector",
+          "value": "[data-testid=\"btn-quick-login-admin\"]"
+        },
+        "fallback": {
+          "kind": "text",
+          "value": "Login as Admin"
+        },
+        "robustness_reasoning": "The admin login control is targeted by its data-testid attribute 'btn-quick-login-admin', which is an explicit test hook baked into the app's markup rather than a styling class or DOM position. data-testid values are the app's contract for automation and survive CSS refactors, copy changes, and re-layout of the auth card, so this locator will resolve on every future replay. Visible text 'Login as Admin' is supplied only as a fallback. This is the app's built-in admin credential path, so it needs no hardcoded username/password that could rotate between runs."
+      },
+      "params": {},
+      "idempotency_note": "Safe to re-click while still on /login -- it re-authenticates the same admin session rather than creating anything. Once login has succeeded the app navigates away and this button no longer exists, so a replay that retries should re-check the URL rather than blindly re-clicking.",
+      "max_recovery_attempts": null
+    },
+    {
+      "step": 2,
+      "action": "click",
+      "target": {
+        "primary": {
+          "kind": "dom_selector",
+          "value": "[data-testid=\"nav-link-user-management\"]"
+        },
+        "fallback": {
+          "kind": "text",
+          "value": "User Management"
+        },
+        "robustness_reasoning": "The sidebar's User Management link carries the app-provided test hook data-testid='nav-link-user-management'. That attribute is part of the app's automation contract and is independent of the nav item's position in the sidebar, its 'active'/inactive class (which toggles as you navigate), and any icon or styling changes -- all of which a class- or nth-child-based selector would break on. The link also has a stable href of /admin/users, and its visible label 'User Management' is supplied as a text fallback, so the locator has two independent ways to resolve on a future replay."
+      },
+      "params": {},
+      "idempotency_note": "Safe to re-click: it is a plain navigation link to /admin/users that mutates nothing. Re-clicking while already on the User Management page simply re-renders the same list.",
+      "max_recovery_attempts": null
+    },
+    {
+      "step": 3,
+      "action": "type",
+      "target": {
+        "primary": {
+          "kind": "dom_selector",
+          "value": "[data-testid=\"input-search-users\"]"
+        },
+        "fallback": null,
+        "robustness_reasoning": "The search field is located by its app-provided test hook data-testid='input-search-users', not by placeholder copy or DOM position, so it survives wording changes to the placeholder and any re-layout of the search card. Its own placeholder documents that account number is a supported search key ('Search by name, username, email, or account number...'), so filtering by the literal account number {{account_number}} is the app's intended lookup path rather than a coincidence of the current data. The account number is the stable identity of the member the goal names -- unlike a display name or balance, it is the parameter of this capability, so it is correct for it to be a fixed step input while everything else about the row stays dynamic."
+      },
+      "params": {
+        "text": "{{account_number}}"
+      },
+      "idempotency_note": "Safe to repeat: typing into the search box is a pure client-side filter that mutates no account data. Re-running the step replaces the field contents and re-filters to the same single member.",
+      "max_recovery_attempts": null
+    }
+  ],
+  "revision_note": null
+}

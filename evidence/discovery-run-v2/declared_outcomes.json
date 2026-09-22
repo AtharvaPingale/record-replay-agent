@@ -1,0 +1,28 @@
+{
+  "business_outcomes": [
+    {
+      "name": "account_not_found",
+      "match": {
+        "type": "text_present",
+        "value": "No users found"
+      }
+    }
+  ],
+  "recoverable_patterns": [],
+  "checkpoint": {
+    "type": "selector_visible",
+    "value": "text={{account_number}}"
+  },
+  "output_schema": {
+    "account_balance": "string"
+  },
+  "output_extractors": [
+    {
+      "name": "account_balance",
+      "target": {
+        "kind": "dom_selector",
+        "value": "xpath=//*[normalize-space(text())='{{account_number}}']/following-sibling::*[1]"
+      }
+    }
+  ]
+}

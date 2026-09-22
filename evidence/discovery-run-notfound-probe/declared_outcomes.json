@@ -1,0 +1,18 @@
+{
+  "business_outcomes": [
+    {
+      "name": "account_not_found",
+      "match": {
+        "type": "text_present",
+        "value": "No users found"
+      }
+    }
+  ],
+  "recoverable_patterns": [],
+  "checkpoint": {
+    "type": "text_present",
+    "value": "No users found"
+  },
+  "output_schema": {},
+  "output_extractors": []
+}

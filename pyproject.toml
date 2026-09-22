@@ -1,0 +1,39 @@
+[project]
+name = "record-replay-agent"
+version = "0.1.0"
+description = "An LLM discovers a UI flow once; a deterministic engine replays it as a typed, versioned capability with no model in the loop -- with guardrails, evidence, and human handoff on the live session."
+readme = "README.md"
+authors = [
+    { name = "Atharva", email = "atharvapingale@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=1.5.0",
+    "playwright>=1.62.0",
+    "pydantic>=2.13.5",
+    "python-dotenv>=1.2.3",
+]
+
+# Heavy (paddlepaddle alone pulls in numpy/opencv/etc.) and only needed for the
+# OCR-based locator (locator/ocr.py) and pre-LLM screenshot redaction
+# (guardrails/pii_redact.py, which runs the same OCR pass) -- everything else
+# in this repo, including the zero-LLM replay demo, works without it.
+# `uv sync --extra ocr` to get it. Pillow is listed explicitly (not just
+# relied on as paddlepaddle's transitive dependency, which it happens to
+# currently be) since pii_redact.py imports it directly to draw redaction
+# boxes -- an undeclared transitive dep is a real breakage risk the moment
+# paddlepaddle's own dependency tree changes.
+[project.optional-dependencies]
+ocr = [
+    "paddleocr>=3.7.0",
+    "paddlepaddle>=3.3.1",
+    "pillow>=10.0.0",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+]

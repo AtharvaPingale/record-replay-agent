@@ -1,0 +1,7 @@
+{
+  "_comment": "Hand-curated, reviewed allowlist for the one target this build has recorded capabilities against (a demo bank admin console -- no real institution, no real customer data). Replay uses this verbatim when an artifact's domain is listed here; recording against any other URL gets guardrails/allowlist.py's dynamic default-deny scope instead. Routes are enumerated positively: anything not matched is refused before the browser loads a byte.",
+  "allowed_domains": ["vb-bank-demo.vercel.app"],
+  "allowed_path_patterns": ["/", "/login", "/admin/dashboard", "/admin/users", "/admin/users/*"],
+  "blocked_path_patterns": ["*/delete*", "*/transfer*", "*payment*", "*/settings*", "*password*", "*/logout*"],
+  "allowed_action_types": ["click", "type", "select", "wait", "assert_text", "go_to", "key", "done", "ask_user"]
+}
